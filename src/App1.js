@@ -11,7 +11,7 @@ class App1 extends Component {
         "Hunter Beef",
         "Gola Kabab",
         "Reshmi Kabab",
-        "Seekh",
+        "Kaleji",
         "Beef Pulao",
         "Shaami Kabab",
         "Seekh Kabab",
@@ -28,12 +28,13 @@ class App1 extends Component {
     const { list } = this.state;
     const text = e.target.value;
     const result = list.filter(item => {
-      return (
-        item
-          .toLowerCase()
-          .substring(0, text.toLowerCase().length)
-          .indexOf(text.toLowerCase()) !== -1
-      );
+      let lowerText = text.toLowerCase();
+      let lowerItem = item.toLowerCase();
+      // return lowerItem.substring(0, lowerText.length).indexOf(lowerText) !== -1;
+      // return lowerItem.substring(0, lowerText.length).includes(lowerText);
+      // return lowerItem.substring(0, lowerText.length) === lowerText
+      // return !lowerItem.indexOf(lowerText);
+      return lowerItem.indexOf(lowerText);
     });
     console.log(result);
     this.setState({ result, text });
