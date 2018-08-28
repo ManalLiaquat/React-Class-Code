@@ -72,12 +72,21 @@ class App extends Component {
 
   /* Body functions */
 
+  renderHeader() {
+    return (
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1 className="App-title">Todo List App</h1>
+      </header>
+    );
+  }
+
   renderBody() {
     const { currentIndex } = this.state;
 
     return (
-      <div>
-        <hr/>
+      <div style={{ marginBottom: "50px" }}>
+        <hr />
         <input
           type="text"
           placeholder="Enter something"
@@ -100,19 +109,10 @@ class App extends Component {
       </div>
     );
   }
-  sd;
-  renderHeader() {
-    return (
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to React</h1>
-      </header>
-    );
-  }
 
   renderFooter() {
     const footer_style = {
-      position: "absolute",
+      position: "fixed",
       bottom: 0,
       width: "100%",
       backgroundColor: "#222",
