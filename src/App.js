@@ -58,14 +58,6 @@ class App extends Component {
 
   /* Body functions */
 
-  renderHeader() {
-    return (
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to React</h1>
-      </header>
-    );
-  }
 
   renderBody() {
     return (
@@ -80,6 +72,14 @@ class App extends Component {
         <hr />
         {this.renderTodos()}
       </div>
+    );
+  }sd
+  renderHeader() {
+    return (
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1 className="App-title">Welcome to React</h1>
+      </header>
     );
   }
 
