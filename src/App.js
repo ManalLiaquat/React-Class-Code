@@ -6,68 +6,37 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      todos: [],
+      list: [],
       text: "",
+      date: new Date().toString(),
       currentIndex: null
     };
-    this.add = this.add.bind(this);
     this.updateText = this.updateText.bind(this);
-    this.cancel = this.cancel.bind(this);
-    this.updateTodo = this.updateTodo.bind(this);
+    this.addItem = this.addItem.bind(this);
   }
 
-  /* Functional functions */
+  addItem() {
+    const { text, list } = this.state;
+    const obj = { text, date: new Date().toLocaleString() };
+    // console.log(obj);
+    list.push(obj);
+    this.setState({ list, text: "" });
+  }
 
   updateText(e) {
-    this.setState({
-      text: e.target.value
-    });
+    this.setState({ text: e.target.value });
   }
 
-  add() {
-    const { text, todos } = this.state;
-    todos.push(text);
-    this.setState({ todos, text: "" });
-
-    console.log(this.state.todos);
+  hide(index) {
+    const { list } = this.state;
+    list[index].hide = true;
+    this.setState({ list });
   }
 
-  updateTodo() {
-    const { todos, text, currentIndex } = this.state;
-    todos[currentIndex] = text;
-    this.setState({ text: todos[currentIndex], currentIndex: null });
-  }
-
-  edit(index) {
-    const { todos } = this.state;
-    this.setState({ text: todos[index], currentIndex: index });
-  }
-
-  delete(index) {
-    const { todos } = this.state;
-    todos.splice(index, 1);
-    this.setState({ todos, currentIndex: null });
-  }
-
-  cancel() {
-    this.setState({ text: "", currentIndex: null });
-  }
-
-  renderTodos() {
-    const { todos } = this.state;
-    return (
-      <ol>
-        {todos.map((item, index) => {
-          return (
-            <li key={`${item}_${index}`}>
-              {item}
-              <button onClick={this.edit.bind(this, index)}>Edit</button>
-              <button onClick={this.delete.bind(this, index)}>Delete</button>
-            </li>
-          );
-        })}
-      </ol>
-    );
+  show(index) {
+    const { list } = this.state;
+    list[index].hide = false;
+    this.setState({ list });
   }
 
   /* Body functions */
@@ -82,30 +51,33 @@ class App extends Component {
   }
 
   renderBody() {
-    const { currentIndex } = this.state;
+    const { text, list } = this.state;
 
     return (
       <div style={{ marginBottom: "50px" }}>
-        <hr />
-        <input
-          type="text"
-          placeholder="Enter something"
-          onChange={this.updateText}
-          value={this.state.text}
-        />
-        {currentIndex == null ? (
-          <button onClick={this.add}>Add</button>
-        ) : (
-          <span>
-            <button onClick={this.updateTodo}>Update</button>
-            <button onClick={this.cancel}>Cancel</button>
-          </span>
-        )}
-        <hr />
-        {currentIndex != null && (
-          <p>You are editing item # {currentIndex + 1} currently</p>
-        )}
-        {this.renderTodos()}
+        <input type="text" onChange={this.updateText} value={text} />
+        <br />
+        {text.split("").reverse()}
+        <br />
+        <button onClick={this.addItem}>Add</button>
+
+        <ul>
+          {list.map((item, index) => {
+            return (
+              <li>
+                {!item.hide && (
+                  <p>
+                    {item.text.split("").reverse()} | {item.date}
+                  </p>
+                )}
+                {
+                  !item.hide ? <button onClick={this.hide.bind(this, index)}>Hide</button> : <button onClick={this.show.bind(this, index)}>Show</button>
+                }
+                
+              </li>
+            );
+          })}
+        </ul>
       </div>
     );
   }
