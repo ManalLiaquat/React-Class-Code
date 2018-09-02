@@ -1,42 +1,25 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import Login from "./Screens/Login/Login";
+import AddForm from "./Screens/AddForm/AddForm";
+import Dashboard from "./Screens/Dashboard/Dashboard";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      list: [],
-      text: "",
-      date: new Date().toString(),
-      currentIndex: null
+      user: false
     };
-    this.updateText = this.updateText.bind(this);
-    this.addItem = this.addItem.bind(this);
+    this.onLogin = this.onLogin.bind(this);
   }
 
-  addItem() {
-    const { text, list } = this.state;
-    const obj = { text, date: new Date().toLocaleString() };
-    // console.log(obj);
-    list.push(obj);
-    this.setState({ list, text: "" });
-  }
-
-  updateText(e) {
-    this.setState({ text: e.target.value });
-  }
-
-  hide(index) {
-    const { list } = this.state;
-    list[index].hide = true;
-    this.setState({ list });
-  }
-
-  show(index) {
-    const { list } = this.state;
-    list[index].hide = false;
-    this.setState({ list });
+  onLogin(email, pass) {
+    this.setState({ user: true });
+    console.log(email);
+    console.log(pass);
+    
+    
   }
 
   /* Body functions */
@@ -45,39 +28,20 @@ class App extends Component {
     return (
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Todo List App</h1>
+        <h1 className="App-title">Employee</h1>
       </header>
     );
   }
 
   renderBody() {
-    const { text, list } = this.state;
+    const { user } = this.state;
 
     return (
       <div style={{ marginBottom: "50px" }}>
-        <input type="text" onChange={this.updateText} value={text} />
-        <br />
-        {text.split("").reverse()}
-        <br />
-        <button onClick={this.addItem}>Add</button>
+        {!user && <Login text="Hello World!" onLogin={this.onLogin} />}
+        {user && <Dashboard />}
 
-        <ul>
-          {list.map((item, index) => {
-            return (
-              <li>
-                {!item.hide && (
-                  <p>
-                    {item.text.split("").reverse()} | {item.date}
-                  </p>
-                )}
-                {
-                  !item.hide ? <button onClick={this.hide.bind(this, index)}>Hide</button> : <button onClick={this.show.bind(this, index)}>Show</button>
-                }
-                
-              </li>
-            );
-          })}
-        </ul>
+        {/* <AddForm /> */}
       </div>
     );
   }
