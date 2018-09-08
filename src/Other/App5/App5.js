@@ -1,52 +1,43 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import QuizList from "./Screens/QuizList/QuizList";
-import QuizInfo from "./Screens/QuizInfo/QuizInfo";
+import MyButton from "./Screens/button/button";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      quizzes: [
-        { name: "MongoDB", questions: 20 },
-        { name: "Express JS", questions: 40 },
-        { name: "React JS", questions: 50 },
-        { name: "Node JS", questions: 60 }
-      ],
-      quizInfo: null,
-      infoBody: false
+      show: true
     };
-    this.quizInfo = this.quizInfo.bind(this);
-    this.back = this.back.bind(this);
+    this.toggleImage = this.toggleImage.bind(this);
   }
 
-  quizInfo(index) {
-    const { quizzes } = this.state;
-    this.setState({ quizInfo: quizzes[index], infoBody: true });
+  toggleImage(bool) {
+    this.setState({
+      show: bool
+    });
   }
 
-  back() {
-    this.setState({ infoBody: false });
-  }
   /* Body functions */
 
   renderHeader() {
     return (
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">quiz app</h1>
+        <h1 className="App-title">switch</h1>
       </header>
     );
   }
 
   renderBody() {
-    const { quizzes, infoBody, quizInfo } = this.state;
+    const { show } = this.state;
 
     return (
-      <div>
-        {!infoBody && <QuizList allQuiz={quizzes} quiz={this.quizInfo} />}
-        {infoBody && <QuizInfo info={quizInfo} back={this.back} />}
+      <div style={{ marginBottom: "50px" }}>
+        <MyButton text="Switch On" jabClickHo={() => this.toggleImage(true)} />
+        <MyButton text="Switch Off" jabClickHo={() => this.toggleImage(false)}/>
+        
+        {show && <img src={logo} alt="img" />}
       </div>
     );
   }

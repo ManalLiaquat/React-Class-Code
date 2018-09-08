@@ -42,7 +42,6 @@ class App extends Component {
 
   renderBody() {
     const { quizzes, infoBody, quizInfo } = this.state;
-
     return (
       <div>
         {!infoBody && <QuizList allQuiz={quizzes} quiz={this.quizInfo} />}
