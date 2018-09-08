@@ -1,21 +1,23 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import MyButton from "./Screens/button/button";
+import Login from "./Screens/Login/Login";
+import AddForm from "./Screens/AddForm/AddForm";
+import Dashboard from "./Screens/Dashboard/Dashboard";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      show: true
+      user: false
     };
-    this.toggleImage = this.toggleImage.bind(this);
+    this.onLogin = this.onLogin.bind(this);
   }
 
-  toggleImage(bool) {
-    this.setState({
-      show: bool
-    });
+  onLogin(email, pass) {
+    this.setState({ user: true });
+    console.log(email);
+    console.log(pass);
   }
 
   /* Body functions */
@@ -24,20 +26,20 @@ class App extends Component {
     return (
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">switch</h1>
+        <h1 className="App-title">Employee</h1>
       </header>
     );
   }
 
   renderBody() {
-    const { show } = this.state;
+    const { user } = this.state;
 
     return (
       <div style={{ marginBottom: "50px" }}>
-        <MyButton text="Switch On" jabClickHo={() => this.toggleImage(true)} />
-        <MyButton text="Switch Off" jabClickHo={() => this.toggleImage(false)}/>
-        
-        {show && <img src={logo} alt="img" />}
+        {!user && <Login text="Hello World!" onLogin={this.onLogin} />}
+        {user && <Dashboard />}
+
+        {/* <AddForm /> */}
       </div>
     );
   }
