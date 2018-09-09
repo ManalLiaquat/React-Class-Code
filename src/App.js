@@ -1,34 +1,14 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import QuizList from "./Screens/QuizList/QuizList";
-import QuizInfo from "./Screens/QuizInfo/QuizInfo";
+import Container from "./Components/Container/Container";
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      quizzes: [
-        { name: "MongoDB", questions: 20 },
-        { name: "Express JS", questions: 40 },
-        { name: "React JS", questions: 50 },
-        { name: "Node JS", questions: 60 }
-      ],
-      quizInfo: null,
-      infoBody: false
-    };
-    this.quizInfo = this.quizInfo.bind(this);
-    this.back = this.back.bind(this);
+    this.state = {};
   }
 
-  quizInfo(index) {
-    const { quizzes } = this.state;
-    this.setState({ quizInfo: quizzes[index], infoBody: true });
-  }
-
-  back() {
-    this.setState({ infoBody: false });
-  }
   /* Body functions */
 
   renderHeader() {
@@ -42,13 +22,12 @@ class App extends Component {
 
   renderBody() {
     const { quizzes, infoBody, quizInfo } = this.state;
-
-    return (
-      <div>
-        {!infoBody && <QuizList allQuiz={quizzes} quiz={this.quizInfo} />}
-        {infoBody && <QuizInfo info={quizInfo} back={this.back} />}
-      </div>
-    );
+    return <div>
+        <h1>(App.js) not a children Container</h1>
+        <Container>
+          <h1>(App.js) children Container</h1>
+        </Container>
+      </div>;
   }
 
   renderFooter() {
