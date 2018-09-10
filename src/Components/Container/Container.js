@@ -1,19 +1,16 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import "./App.css";
 
-class Container extends Component {
-    constructor(props) {
-        super(props);
-        // this.state = {};
-    }
-
-    render() {
-        return <div>
-            <h6>(Container.js) Container</h6>
-            {this.props.children}
-          </div>;
-    }
-}
+const Container = props => {
+  return (
+    <div>
+      <h3 style={{ color: "red" }}>(Container.js) Container</h3>
+      {props.children}
+    </div>
+  );
+};
 
 export default Container;
+
+/* 
+    super main props na likhney pr constructor k bahir koi farq nahi prta phir bhi available hota hai
+*/
