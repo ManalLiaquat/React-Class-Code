@@ -12,7 +12,7 @@ class QuizInfo extends Component {
     return (
       <div>
         <p>Quiz test of: {info.name}</p>
-        <p>Quiz test of: {info.questions}</p>
+        <p>Total Questions: {info.questions}</p>
         <button onClick={back} >Back to List</button>
       </div>
     );

@@ -14,7 +14,7 @@ class App extends Component {
         { name: "React JS", questions: 50 },
         { name: "Node JS", questions: 60 }
       ],
-      quizInfo: null,
+      quizInfoObj: null,
       infoBody: false
     };
     this.quizInfo = this.quizInfo.bind(this);
@@ -23,7 +23,7 @@ class App extends Component {
 
   quizInfo(index) {
     const { quizzes } = this.state;
-    this.setState({ quizInfo: quizzes[index], infoBody: true });
+    this.setState({ quizInfoObj: quizzes[index], infoBody: true });
   }
 
   back() {
@@ -31,22 +31,20 @@ class App extends Component {
   }
   /* Body functions */
 
+  renderBody() {
+    const { quizzes, infoBody, quizInfoObj } = this.state;
+    return <div>
+        {!infoBody && <QuizList allQuiz={quizzes} info={this.quizInfo} />}
+        {infoBody && <QuizInfo info={quizInfoObj} back={this.back} />}
+      </div>;
+  }
+
   renderHeader() {
     return (
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1 className="App-title">quiz app</h1>
       </header>
-    );
-  }
-
-  renderBody() {
-    const { quizzes, infoBody, quizInfo } = this.state;
-    return (
-      <div>
-        {!infoBody && <QuizList allQuiz={quizzes} quiz={this.quizInfo} />}
-        {infoBody && <QuizInfo info={quizInfo} back={this.back} />}
-      </div>
     );
   }
 

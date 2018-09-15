@@ -11,14 +11,14 @@ class QuizList extends Component {
   }
 
   render() {
-    const { allQuiz } = this.props;
+    const { allQuiz, info } = this.props;
     return (
       <ul>
         {allQuiz.map((value, index) => {
           return (
             <li key={`${value}_${index}`}>
               {value.name}
-              <button onClick={() => this.props.quiz(index)}>Show Quiz Info</button>
+              <button onClick={() => info(index)}>Show Quiz Info</button>
             </li>
           );
         })}
