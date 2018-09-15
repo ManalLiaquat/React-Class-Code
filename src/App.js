@@ -12,7 +12,7 @@ class App extends Component {
           title: "dummy title 1",
           comments: 4,
           date: new Date(),
-          isOpen: true,
+          isOpen: false,
           isFavourite: false
         },
         {
@@ -24,11 +24,56 @@ class App extends Component {
         }
       ],
       text: null,
-      toggleHeart: false
+      toggleHeart: false,
+      searchIssue: null
     };
     this.toggleHeart = this.toggleHeart.bind(this);
     this.toggleOpen = this.toggleOpen.bind(this);
+    this.searchIssue = this.searchIssue.bind(this);
+
+    // this.newFilter = this.newFilter.bind(this);
   }
+
+  searchIssue(e) {
+    // const { text } = this.state;
+    var text = e.target.value;
+    // console.log(text);
+    // var i = 1;
+    // console.log(i++, "******");
+    const { issues } = this.state;
+    issues
+      .filter(item => {
+        return item.isOpen
+          ? text === "open"
+            ? item.isOpen
+            : text === "close"
+              ? !item.isOpen
+              : null
+          : text === "close"
+            ? !item.isOpen
+            : text === "open"
+              ? item.isOpen
+              : null;
+      })
+      .map(v => console.log("obj****", v));
+    // .map(v => console.log(v,"obj"));
+    debugger;
+    // if (text === "open") {
+    //   debugger;
+    //   this.setState({ searchIssue: true });
+    // } else if (text === "close") {
+    //   debugger;
+    //   this.setState({ searchIssue: false });
+    // }
+  }
+  // newFilter() {
+  //   const { searchIssue, issues } = this.state;
+  //   issues
+  //     .filter(item => {
+  //       return item.isOpen ? searchIssue : !searchIssue;
+  //     })
+  //     .map(v => console.log(v.title));
+  // }
 
   toggleOpen(i) {
     const { issues } = this.state;
@@ -61,7 +106,13 @@ class App extends Component {
           <input
             type="text"
             style={{ width: "80%" }}
-            onChange={e => this.setState({ text: e.target.value })}
+            onChange={e => {
+              this.setState({ text: e.target.value });
+              // this.newFilter();
+              this.searchIssue(e);
+            }}
+            autoFocus={true}
+            // onChange={this.newFilter}
           />
         </center>
         <ul style={{ listStyle: "none" }}>
