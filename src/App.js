@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-// import Container from "./Screens";
+import Container from "./Screens/Container/Container";
 
 class App extends Component {
   constructor() {
@@ -23,9 +23,11 @@ class App extends Component {
           isFavourite: false
         }
       ],
+      filteredIssues: [],
       text: null,
       toggleHeart: false,
-      searchIssue: null
+      searchIssue: null,
+      text: "Hello World"
     };
     this.toggleHeart = this.toggleHeart.bind(this);
     this.toggleOpen = this.toggleOpen.bind(this);
@@ -35,12 +37,12 @@ class App extends Component {
   }
 
   searchIssue(e) {
-    // const { text } = this.state;
     var text = e.target.value;
+    // const { text } = this.state;
     // console.log(text);
     // var i = 1;
     // console.log(i++, "******");
-    const { issues } = this.state;
+    const { issues, filteredIssues } = this.state;
     issues
       .filter(item => {
         return item.isOpen
@@ -57,7 +59,7 @@ class App extends Component {
       })
       .map(v => console.log("obj****", v));
     // .map(v => console.log(v,"obj"));
-    debugger;
+    // debugger;
     // if (text === "open") {
     //   debugger;
     //   this.setState({ searchIssue: true });
@@ -107,7 +109,7 @@ class App extends Component {
             type="text"
             style={{ width: "80%" }}
             onChange={e => {
-              this.setState({ text: e.target.value });
+              // this.setState({ text: e.target.value });
               // this.newFilter();
               this.searchIssue(e);
             }}
@@ -166,11 +168,18 @@ class App extends Component {
   }
 
   render() {
+    const { text } = this.state;
     return (
-      <div>
+      <div className="App">
         <div className="App">{this.renderHeader()}</div>
-        <div>{this.renderBody()}</div>
+        {/* <div>{this.renderBody()}</div> */}
         <div className="App">{this.renderFooter()}</div>
+        <input
+          type="text"
+          autoFocus={true}
+          onChange={e => this.setState({ text: e.target.value })}
+        />
+        <Container text={text} />
       </div>
     );
   }
