@@ -109,7 +109,7 @@ class App extends Component {
             type="text"
             style={{ width: "80%" }}
             onChange={e => {
-              // this.setState({ text: e.target.value });
+              // this.setState({ text: e.target.value })
               // this.newFilter();
               this.searchIssue(e);
             }}
