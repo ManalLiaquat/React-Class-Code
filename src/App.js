@@ -9,21 +9,14 @@ class App extends Component {
     this.state = { text: "Saylani" };
   }
 
-  /*  */
+  /* new life cycle hooks */
   static getDerivedStateFromProps(props, state) {
+    // alternate componentWillReceiveProps
     console.log("======================");
+    console.log("getDerivedStateFromProps");
     console.log(props, state);
     console.log("======================");
     return { text: state.text };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps");
-  }
-  // jab bhi state change hogi child ka event zaroor chalega
-
-  componentWillMount() {
-    console.log("componentWillMount");
   }
 
   componentDidMount() {
@@ -31,21 +24,41 @@ class App extends Component {
     console.log("componentDidMount");
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log("componentWillUpdate");
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
-  }
-
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps, nextState) {
     console.log("shouldComponentUpdate");
+    if (nextState.text == "manal") {
+      return false;
+    }
     return true;
   }
 
   componentWillUnmount() {
     console.log("componentWillUnmount");
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("getSnapshotBeforeUpdate");
+    return { text: prevState.text };
+  }
+  componentDidUpdate(prevProps, prevState, snapshop) {
+    console.log("componentDidUpdate");
+    console.log(snapshop);
+  }
+
+  /* new life cycle hooks */
+
+  componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps");
+  }
+
+  // jab bhi state change hogi child ka event zaroor chalega
+
+  componentWillMount() {
+    console.log("componentWillMount");
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("componentWillUpdate");
   }
 
   componentDidCatch() {
@@ -56,8 +69,11 @@ class App extends Component {
 
   renderBody() {
     const { text } = this.state;
+    console.log("render ===> ", text);
+
     return (
       <div>
+        {text}
         <input
           type="text"
           value={text}
