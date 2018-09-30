@@ -1,86 +1,69 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-// import Container from "./Screens/Container/Container";
+
+const AbortController = window.AbortController;
+const controller = new AbortController();
+const signal = controller.signal;
+
+const PATH_BASE = "https://hn.algolia.com/api/v1";
+const PATH_SEARCH = "/search";
+const PARAM_SEARCH = "query=";
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { text: "Saylani" };
+    this.state = { searchTerm: "", result: null };
   }
 
-  /* new life cycle hooks */
-  static getDerivedStateFromProps(props, state) {
-    // alternate componentWillReceiveProps
-    console.log("======================");
-    console.log("getDerivedStateFromProps");
-    console.log(props, state);
-    console.log("======================");
-    return { text: state.text };
+  search(searchTerm) {
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}=${searchTerm}`, {
+      method: "get",
+      signal: signal
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log("Getting data***");
+        this.setState({ result });
+      })
+      .catch(e => alert(e.message));
   }
 
-  componentDidMount() {
-    // recommended
-    console.log("componentDidMount");
+  abortFetching() {
+    console.log("revoking fetch function");
+    controller.abort();
   }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate");
-    if (nextState.text == "manal") {
-      return false;
-    }
-    return true;
-  }
-
-  componentWillUnmount() {
-    console.log("componentWillUnmount");
-  }
-
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    console.log("getSnapshotBeforeUpdate");
-    return { text: prevState.text };
-  }
-  componentDidUpdate(prevProps, prevState, snapshop) {
-    console.log("componentDidUpdate");
-    console.log(snapshop);
-  }
-
-  /* new life cycle hooks */
-
-  componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps");
-  }
-
-  // jab bhi state change hogi child ka event zaroor chalega
-
-  componentWillMount() {
-    console.log("componentWillMount");
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    console.log("componentWillUpdate");
-  }
-
-  componentDidCatch() {
-    console.log("componentDidCatch");
-  }
-
-  /* Body functions */
 
   renderBody() {
-    const { text } = this.state;
-    console.log("render ===> ", text);
-
+    const { searchTerm, result } = this.state;
+    // console.losg("render ===> ", searchTerm);
     return (
       <div>
-        {text}
-        <input
-          type="text"
-          value={text}
-          onChange={e => {
-            this.setState({ text: e.target.value });
-          }}
-        />
+        <center>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={e => {
+              this.search(e.target.value);
+              this.setState({ searchTerm: e.target.value });
+            }}
+          />
+          <button
+            onClick={() => {
+              this.search(searchTerm);
+            }}
+          >
+            Search
+          </button>
+          <button onClick={this.abortFetching}>Cancel fetching</button>
+        </center>
+        <ul>
+          {result
+            ? result.hits.map((v, i) => {
+                return <li key={v.title + "_" + i}>{v.title}</li>;
+              })
+            : null}
+        </ul>
       </div>
     );
   }
@@ -110,10 +93,10 @@ class App extends Component {
   render() {
     // const { text } = this.state;
     return (
-      <div className="App">
-        {this.renderHeader()}
+      <div>
+        <div className="App">{this.renderHeader()}</div>
         {this.renderBody()}
-        {this.renderFooter()}
+        <div className="App">{this.renderFooter()}</div>
       </div>
     );
   }
