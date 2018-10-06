@@ -17,7 +17,8 @@ class App extends Component {
     this.state = {
       searchTerm: "React",
       result: null,
-      i: 0
+      i: 0,
+      pagination: 0
     };
   }
 
@@ -55,13 +56,39 @@ class App extends Component {
     if (this.state.result) {
       if (
         window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 500 &&
+          document.body.offsetHeight + 10 &&
         this.state.result.length
       ) {
+        // this.setState({ i: ++this.state.i });
         // this.search();
       }
     }
+    console.log(
+      `${window.innerHeight + window.scrollY} >= ${document.body.offsetHeight +
+        10}`
+    );
   };
+
+  pagination(i = 0) {
+    let { searchTerm } = this.state;
+    fetch(
+      `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&&${PARAM_PAGE}${i}`,
+      {
+        method: "get",
+        signal: signal
+      }
+    )
+      .then(res => res.json())
+      .then(result => {
+        console.log("Getting data***");
+        this.setState({ result: result.hits, pagination: result.nbPages });
+      })
+      .catch(e => alert(e.message));
+  }
+
+  componentDidMount() {
+    this.pagination();
+  }
 
   abortFetching() {
     console.log("revoking fetch function");
@@ -69,11 +96,33 @@ class App extends Component {
   }
 
   renderBody() {
-    let { searchTerm, result } = this.state;
+    let { searchTerm, result, pagination } = this.state;
     // console.losg("render ===> ", searchTerm);
+    let pages = [];
+    for (let i = 0; i < pagination; i++) pages.push(i);
+    const renderPagination = pages.map(v => {
+      return (
+        <li
+          key={v}
+          onClick={() => {
+            this.pagination(v);
+          }}
+          style={{
+            display: "inline",
+            margin: "auto 1px",
+            cursor: "pointer",
+            padding: "1px",
+            border: "thin solid grey"
+          }}
+        >
+          {v + 1}
+        </li>
+      );
+    });
     return (
       <div>
         <center>
+          <ul>{renderPagination}</ul>
           <input
             type="text"
             value={searchTerm}
@@ -91,17 +140,17 @@ class App extends Component {
           </button>
           <button onClick={this.abortFetching}>Cancel fetching</button>
         </center>
-        <ul>
+        <ol>
           {result
-            ? result.map((v, i) => {
+            ? result.map(v => {
                 return (
-                  <li key={v.title + "_" + i}>
-                    {i + 1}. {v.title}
+                  <li key={v.objectID}>
+                    <p>{v.title}</p>
                   </li>
                 );
               })
             : null}
-          {result && (
+          {/* {result && (
             <button
               onClick={() => {
                 this.setState({ i: ++this.state.i });
@@ -110,8 +159,8 @@ class App extends Component {
             >
               Load More
             </button>
-          )}
-        </ul>
+          )} */}
+        </ol>
       </div>
     );
   }
