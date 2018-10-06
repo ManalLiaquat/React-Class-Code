@@ -9,25 +9,59 @@ const signal = controller.signal;
 const PATH_BASE = "https://hn.algolia.com/api/v1";
 const PATH_SEARCH = "/search";
 const PARAM_SEARCH = "query=";
+const PARAM_PAGE = "page=";
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { searchTerm: "", result: null };
+    this.state = {
+      searchTerm: "React",
+      result: null,
+      i: 0
+    };
   }
 
   search(searchTerm) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}=${searchTerm}`, {
-      method: "get",
-      signal: signal
-    })
+    let { i, result } = this.state;
+    fetch(
+      `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&&${PARAM_PAGE}${i}`,
+      {
+        method: "get",
+        signal: signal
+      }
+    )
       .then(res => res.json())
-      .then(result => {
+      .then(newResult => {
         console.log("Getting data***");
-        this.setState({ result });
+        this.setState({ result: newResult.hits });
+        if (i > 0) {
+          this.setState({
+            result: result.concat(newResult.hits)
+          });
+        }
       })
       .catch(e => alert(e.message));
   }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.onScroll, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll, false);
+  }
+
+  onScroll = () => {
+    if (this.state.result) {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 500 &&
+        this.state.result.length
+      ) {
+        // this.search();
+      }
+    }
+  };
 
   abortFetching() {
     console.log("revoking fetch function");
@@ -35,7 +69,7 @@ class App extends Component {
   }
 
   renderBody() {
-    const { searchTerm, result } = this.state;
+    let { searchTerm, result } = this.state;
     // console.losg("render ===> ", searchTerm);
     return (
       <div>
@@ -44,8 +78,8 @@ class App extends Component {
             type="text"
             value={searchTerm}
             onChange={e => {
-              this.search(e.target.value);
-              this.setState({ searchTerm: e.target.value });
+              // this.search(e.target.value);
+              this.setState({ searchTerm: e.target.value, result: [] });
             }}
           />
           <button
@@ -59,10 +93,24 @@ class App extends Component {
         </center>
         <ul>
           {result
-            ? result.hits.map((v, i) => {
-                return <li key={v.title + "_" + i}>{v.title}</li>;
+            ? result.map((v, i) => {
+                return (
+                  <li key={v.title + "_" + i}>
+                    {i + 1}. {v.title}
+                  </li>
+                );
               })
             : null}
+          {result && (
+            <button
+              onClick={() => {
+                this.setState({ i: ++this.state.i });
+                this.search();
+              }}
+            >
+              Load More
+            </button>
+          )}
         </ul>
       </div>
     );
@@ -96,7 +144,7 @@ class App extends Component {
       <div>
         <div className="App">{this.renderHeader()}</div>
         {this.renderBody()}
-        <div className="App">{this.renderFooter()}</div>
+        {/* <div className="App">{this.renderFooter()}</div> */}
       </div>
     );
   }
