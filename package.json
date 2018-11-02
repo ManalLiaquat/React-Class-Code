@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "firebase": "^5.5.4",
+    "merge": "^1.2.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-google-maps": "^9.4.5",
