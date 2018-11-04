@@ -1,86 +1,34 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import { Provider } from "react-redux";
+import store from "./Redux/store";
+import Child1 from "./Screens/Child1";
 
-class App extends Component {
-  constructor() {
-    super();
+export default class Parent extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {};
-  }
-
-  renderBody() {
-    return (
-      <div>
-        <h2>Routes</h2>
-        <Router>
-          <div>
-            <ul>
-              <li>
-                <button>
-                  <Link to="/">Home</Link>
-                </button>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
-            </ul>
-          </div>
-
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-        </Router>
-      </div>
-    );
-  }
-
-  renderHeader() {
-    return (
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Hello World</h1>
-      </header>
-    );
-  }
-
-  renderFooter() {
-    const footer_style = {
-      position: "fixed",
-      bottom: 0,
-      width: "100%",
-      backgroundColor: "#222",
-      color: "white",
-      padding: "10px 0",
-      margin: 0
-    };
-    return <footer style={footer_style}>This is a footer</footer>;
   }
 
   render() {
     return (
-      <div className="App">
-        {this.renderHeader()}
-        {this.renderBody()}
-        {/* {this.renderFooter()} */}
-      </div>
+      <Provider store={store}>
+        <div>
+          steps redux
+          <Child1 />
+          <ol>
+            <li>Store (provider for react binding)</li>
+            <li>Action</li>
+            <li>Reducer</li>
+          </ol>
+          <ol>
+            <li>component request krega action ko</li>
+            <li>action request krega Reducer ko</li>
+            <li>Reducer update krega store ko</li>
+            <li>store give state to component</li>
+            <li>this state will updated in all components</li>
+          </ol>
+        </div>
+      </Provider>
     );
   }
 }
-
-export default App;
-
-const Home = () => {
-  return <div>This is home</div>;
-};
-
-const About = () => {
-  return <div>This is About</div>;
-};
-
-const Contact = () => {
-  return <div>This is Contact</div>;
-};
